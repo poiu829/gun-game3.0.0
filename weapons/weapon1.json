@@ -4,10 +4,10 @@
   "range": 2.5,
   "interval": 0.4,
   "damage": 27,
-  "cost": 1.5,
-  "speed": 300,
+  "cost": 2,
+  "speed": 500,
   "charge": false,
-  "paintRadius": 5,
-  "impactPaintRadius": 35,
+  "paintRadius": 0,
+  "impactPaintRadius": 20,
   "bulletRadius": 8.5
 }
