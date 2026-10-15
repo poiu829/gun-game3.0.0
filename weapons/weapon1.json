@@ -5,7 +5,7 @@
   "interval": 0.25,
   "damage": 27,
   "cost": 2,
-  "speed": 1000,
+  "speed": 800,
   "charge": false,
   "paintRadius": 0,
   "impactPaintRadius": 20,
