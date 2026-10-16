@@ -10,7 +10,7 @@
   "maxCharge": 0.01,
   "chargeCostPerSec": 0,
   "paintRadius": 0,
-  "impactPaintRadius": 1,
+  "impactPaintRadius": 3,
   "bulletRadius": 0,
   "cameraAimLookaheadCharged": 0.35
 }
