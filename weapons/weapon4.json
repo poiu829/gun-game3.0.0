@@ -3,7 +3,7 @@
   "name": "連打",
   "range": 3,
   "interval": 0.01,
-  "damage": 5,
+  "damage": 10,
   "cost": 2,
   "speed": 400,
   "charge": true,
