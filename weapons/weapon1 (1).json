@@ -1,0 +1,13 @@
+{
+  "id": "weapon1",
+  "name": "標準ブラスター",
+  "range": 2.5,
+  "interval": 0.25,
+  "damage": 27,
+  "cost": 2,
+  "speed": 800,
+  "charge": false,
+  "paintRadius": 0,
+  "impactPaintRadius": 20,
+  "bulletRadius": 8.5
+}
