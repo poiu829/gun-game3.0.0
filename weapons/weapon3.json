@@ -1,15 +1,15 @@
 {
   "id": "weapon3",
   "name": "チャージスナイパー",
-  "range": 3,
+  "range": 10,
   "interval": 0.25,
   "damage": 45,
   "cost": 0,
   "speed": 240,
   "charge": true,
   "maxCharge": 1.5,
-  "chargeCostPerSec": 4,
-  "paintRadius": 52,
-  "impactPaintRadius": 32,
+  "chargeCostPerSec": 20,
+  "paintRadius": 30,
+  "impactPaintRadius": 50,
   "bulletRadius": 9
 }
