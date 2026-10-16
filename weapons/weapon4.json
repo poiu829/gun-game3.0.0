@@ -2,7 +2,7 @@
   "id": "weapon4",
   "name": "連打",
   "range": 3,
-  "interval": 0,
+  "interval": 0.1,
   "damage": 20,
   "cost": 5,
   "speed": 240,
