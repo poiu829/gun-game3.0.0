@@ -3,14 +3,14 @@
   "name": "連打",
   "range": 3,
   "interval": 0.01,
-  "damage": 20,
+  "damage": 5,
   "cost": 5,
   "speed": 240,
   "charge": true,
   "maxCharge": 0.01,
   "chargeCostPerSec": 0,
-  "paintRadius": 52,
-  "impactPaintRadius": 32,
-  "bulletRadius": 5,
+  "paintRadius": 1,
+  "impactPaintRadius": 1,
+  "bulletRadius": 0,
   "cameraAimLookaheadCharged": 0.35
 }
