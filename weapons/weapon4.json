@@ -12,5 +12,5 @@
   "paintRadius": 52,
   "impactPaintRadius": 32,
   "bulletRadius": 5,
-  "cameraAimLookaheadCharged": 0
+  "cameraAimLookaheadCharged": 0.35
 }
