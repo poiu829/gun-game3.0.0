@@ -4,7 +4,7 @@
   "range": 3,
   "interval": 0.01,
   "damage": 5,
-  "cost": 5,
+  "cost": 2,
   "speed": 400,
   "charge": true,
   "maxCharge": 0.01,
