@@ -1,10 +1,10 @@
 {
   "id": "weapon2",
   "name": "ロングレンジ",
-  "range": 2,
+  "range": 4,
   "interval": 1.04,
   "damage": 32.4,
-  "cost": 2,
+  "cost": 3,
   "speed": 180,
   "charge": false,
   "paintRadius": 30,
