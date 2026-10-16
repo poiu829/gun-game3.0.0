@@ -1,0 +1,15 @@
+{
+  "id": "weapon4",
+  "name": "れぇんだぁ",
+  "range": 10,
+  "interval": 0.25,
+  "damage": 50,
+  "cost": 0,
+  "speed": 400,
+  "charge": true,
+  "maxCharge": 0.01,
+  "chargeCostPerSec": 6,
+  "paintRadius": 10,
+  "impactPaintRadius": 50,
+  "bulletRadius": 5
+}
