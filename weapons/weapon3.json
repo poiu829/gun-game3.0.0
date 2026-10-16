@@ -3,13 +3,13 @@
   "name": "チャージスナイパー",
   "range": 10,
   "interval": 0.25,
-  "damage": 45,
+  "damage": 70,
   "cost": 0,
-  "speed": 240,
+  "speed": 300,
   "charge": true,
   "maxCharge": 1.5,
-  "chargeCostPerSec": 20,
+  "chargeCostPerSec": 15,
   "paintRadius": 30,
   "impactPaintRadius": 50,
-  "bulletRadius": 9
+  "bulletRadius": 13
 }
