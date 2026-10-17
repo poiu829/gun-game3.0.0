@@ -2,7 +2,7 @@
   "id": "weapon3",
   "name": "チャージスナイパー",
   "range": 10,
-  "interval": 0.25,
+  "interval": 5,
   "damage": 45,
   "cost": 0,
   "speed": 800,
