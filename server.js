@@ -100,7 +100,7 @@ function assignTeams(humans, fillBots) {
 function createPlayer({id,name,team,isCpu}) {
   return {id,name,team,isCpu:!!isCpu,index:0,x:0,y:0,spawnX:0,spawnY:0,r:15,angle:team===BLUE?0:Math.PI,
     shadow:MAX_SHADOW,alive:true,respawn:0,cooldown:Math.random()*.2,kills:0,deaths:0,
-    input:{moveX:0,moveY:0,aim:team===BLUE?0:Math.PI,aimX:null,aimY:null,fire:false},weaponId:0,loadoutPending:false,chargeTime:0,wasFiring:false,pendingCharge:0,strafe:Math.random()<.5?-1:1};
+    input:{moveX:0,moveY:0,aim:team===BLUE?0:Math.PI,aimX:null,aimY:null,fire:false},weaponId:0,loadoutPending:false,chargeTime:0,wasFiring:false,pendingCharge:0,strafe:Math.random()<.5?-1:1,aiHistory:[],aiGoal:null,aiThink:0};
 }
 function startGame(room, fillBots) {
   if (room.status!=='lobby') return;
@@ -169,17 +169,12 @@ function shoot(g,p,angle,charge=0,aimX=null,aimY=null){
 }
 function kill(g,victim,killer){if(!victim.alive)return;victim.alive=false;victim.deaths++;victim.shadow=0;victim.respawn=1.7;if(killer&&killer.team!==victim.team){killer.kills++;if(g.mode!=='area')g.scores[killer.team===BLUE?'blue':'red']++;g.events.push({text:`${killer.name} が ${victim.name} を倒した`,team:killer.team});}}
 function spawn(p){p.alive=true;p.shadow=80;p.respawn=0;p.x=p.spawnX+(Math.random()-.5)*80;p.y=p.spawnY+(Math.random()-.5)*60;p.cooldown=.5;}
-function aiStep(g,p,dt){if(!p.alive)return;const target=nearestEnemy(g,p);p.cooldown=Math.max(0,p.cooldown-dt);if(!target){ // No target is detectable: cautiously patrol toward mid-field without aiming at anyone.
-  const midX=WORLD_W/2,midY=WORLD_H/2,dx=midX-p.x,dy=midY-p.y,d=Math.hypot(dx,dy)||1;p.x=clamp(p.x+dx/d*55*dt,p.r,WORLD_W-p.r);p.y=clamp(p.y+dy/d*55*dt,p.r,WORLD_H-p.r);return;
- }
- const q=target.p,dx=q.x-p.x,dy=q.y-p.y,d=target.d,a=Math.atan2(dy,dx);let tx=dx,ty=dy;
- if(d<420){tx=Math.cos(a+Math.PI/2*p.strafe)*.8+Math.cos(a)*(d>260?.4:-.28);ty=Math.sin(a+Math.PI/2*p.strafe)*.8+Math.sin(a)*(d>260?.4:-.28);if(Math.random()<.003)p.strafe*=-1;}
- const len=Math.hypot(tx,ty)||1;tx/=len;ty/=len;const speed=80+(p.shadow<30?8:0),nx=clamp(p.x+tx*speed*dt,p.r,WORLD_W-p.r),ny=clamp(p.y+ty*speed*dt,p.r,WORLD_H-p.r);if(!blockedAt(g,nx,p.y,p.r))p.x=nx;if(!blockedAt(g,p.x,ny,p.r))p.y=ny;if(fullyInsideAbyss(g,p))kill(g,p,null);if(!p.alive)return;p.angle=a;
- if(d<150&&p.cooldown<=0){const accuracy=(Math.random()-.5)*(.14+d*.00022);shoot(g,p,a+accuracy);}
-}
+const createCpuAI = require('./cpu');
+const cpuAI = createCpuAI({ clamp, nearestEnemy, WEAPONS, WORLD_W, WORLD_H, shoot, blockedAt, fullyInsideAbyss, kill });
 function stepGame(room,dt){const g=room.game;if(!g||g.ended)return;g.tick++;g.timeLeft=Math.max(0,g.timeLeft-dt);g.events=[];g.paintChanges=[];
+  cpuAI.recordHistory(g,g.tick);
  for(const p of g.players){p.cooldown=Math.max(0,p.cooldown);if(!p.alive){p.respawn-=dt;if(p.respawn<=0)spawn(p);continue;}p.shadow=clamp(p.shadow+6.2*dt,0,MAX_SHADOW);const ground=tileAt(g,p.x,p.y);if(ground!==0&&ground!==p.team)p.shadow=clamp(p.shadow-10.8*dt,0,MAX_SHADOW);if(p.shadow<=0)kill(g,p,null);}
- for(const p of g.players){if(!p.alive||p.loadoutPending)continue;if(p.isCpu){aiStep(g,p,dt);continue;}p.cooldown=Math.max(0,p.cooldown-dt);const i=p.input;let mx=clamp(i.moveX,-1,1),my=clamp(i.moveY,-1,1),len=Math.hypot(mx,my);if(len>1){mx/=len;my/=len;}const speed=95;const nx=clamp(p.x+mx*speed*dt,p.r,WORLD_W-p.r),ny=clamp(p.y+my*speed*dt,p.r,WORLD_H-p.r);if(!blockedAt(g,nx,p.y,p.r))p.x=nx;if(!blockedAt(g,p.x,ny,p.r))p.y=ny;if(fullyInsideAbyss(g,p))kill(g,p,null);if(!p.alive)continue;if(Number.isFinite(i.aim))p.angle=i.aim;
+ for(const p of g.players){if(!p.alive||p.loadoutPending)continue;if(p.isCpu){cpuAI.aiStep(g,p,dt);continue;}p.cooldown=Math.max(0,p.cooldown-dt);const i=p.input;let mx=clamp(i.moveX,-1,1),my=clamp(i.moveY,-1,1),len=Math.hypot(mx,my);if(len>1){mx/=len;my/=len;}const speed=95;const nx=clamp(p.x+mx*speed*dt,p.r,WORLD_W-p.r),ny=clamp(p.y+my*speed*dt,p.r,WORLD_H-p.r);if(!blockedAt(g,nx,p.y,p.r))p.x=nx;if(!blockedAt(g,p.x,ny,p.r))p.y=ny;if(fullyInsideAbyss(g,p))kill(g,p,null);if(!p.alive)continue;if(Number.isFinite(i.aim))p.angle=i.aim;
  const weapon=WEAPONS[p.weaponId]||WEAPONS[0];
  if(weapon.charge){
    if(i.fire){
